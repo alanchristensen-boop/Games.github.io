@@ -2,491 +2,870 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Games</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minecraft Bedrock Style</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f5f6fa;color:#30364b}
-button,input,select{font:inherit}
-button{cursor:pointer;border:0;border-radius:9px;padding:11px 16px;font-weight:bold}
-button:hover{filter:brightness(.94)}
-.sidebar{position:fixed;left:0;top:0;bottom:0;width:225px;background:white;padding:25px 16px;border-right:1px solid #e5e7ef;z-index:5}
-.logo{font-size:29px;font-weight:900;color:#3978e9;margin:5px 12px 35px}
-.nav{display:block;width:100%;text-align:left;background:transparent;color:#626b80;padding:14px;margin-bottom:5px;font-size:15px}
-.nav.active,.nav:hover{background:#eaf1ff;color:#3475e8}
-.nav small{float:right}
-.main{margin-left:225px;padding:30px 40px}
-.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:30px}
-.top h1{margin:0;font-size:29px}
-.profile{background:white;padding:11px 17px;border-radius:12px}
-.search{width:100%;padding:15px;border:1px solid #e1e4ed;border-radius:12px;margin-bottom:25px;background:white;outline:none}
-.search:focus,input:focus{border-color:#3978e9}
-.banner{background:linear-gradient(110deg,#3978e9,#7859e9);color:white;padding:27px;border-radius:16px;margin-bottom:30px}
-.banner h2{margin:0 0 10px;font-size:26px}
-.banner button{background:white;color:#3978e9;margin-top:10px}
-.section-title{display:flex;justify-content:space-between;align-items:center;margin:25px 0 15px}
-.section-title h2{font-size:21px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:17px}
-.card{background:white;border-radius:13px;padding:18px;border:1px solid #e7e9f0;transition:.15s}
-.card:hover{transform:translateY(-3px);box-shadow:0 5px 17px #0000000d}
-.card-icon{font-size:35px;margin-bottom:12px}
-.card h3{margin:5px 0 9px}
-.card p{color:#82899b;font-size:13px;line-height:1.5}
-.card button{margin-top:10px;background:#3978e9;color:white}
-.secondary{background:#edf1fa!important;color:#43516c!important}
-.purple{background:#7958e9!important;color:white!important}
-.green{background:#20a879!important;color:white!important}
-.page{display:none}
-.page.active{display:block}
-.form{background:white;padding:25px;border-radius:14px;max-width:750px}
-.form input,.form select,.form textarea{width:100%;padding:13px;border:1px solid #dfe3ed;border-radius:9px;margin:8px 0 18px}
-.form label{font-weight:bold;font-size:14px}
-.question-box{padding:16px;background:#f5f7fb;border-radius:10px;margin:15px 0}
-.question-box input{margin-bottom:8px}
-.answer-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.answer-grid input{margin:0}
-.primary{background:#3978e9;color:white}
-.danger{background:#ffe9e9;color:#d33}
-#playScreen{position:fixed;inset:0;background:#f4f6fb;z-index:20;display:none;overflow:auto;padding:30px}
-.play-box{max-width:750px;margin:35px auto;background:white;padding:30px;border-radius:18px;text-align:center}
-.play-box h2{font-size:27px}
-.answers{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:25px}
-.answer{padding:22px;background:#3978e9;color:white;font-size:17px}
-.answer:nth-child(2){background:#e95765}
-.answer:nth-child(3){background:#d69b24}
-.answer:nth-child(4){background:#269c77}
-#feedback{font-weight:bold;margin-top:20px}
-.progress{height:9px;background:#e8ebf3;border-radius:10px;margin:20px 0}
-.progress div{height:100%;background:#3978e9;border-radius:10px;width:0}
-.empty{text-align:center;background:white;padding:45px;border-radius:15px;color:#8790a3}
-.mobile{display:none}
-@media(max-width:700px){
-.sidebar{width:65px;padding:15px 7px}
-.logo{font-size:0;margin:8px 4px 25px}
-.logo:first-letter{font-size:25px}
-.nav{font-size:0;text-align:center;padding:14px 4px}
-.nav small{display:none}
-.main{margin-left:65px;padding:20px 13px}
-.top h1{font-size:23px}
-.grid{grid-template-columns:1fr 1fr;gap:9px}
-.card{padding:12px}
-.card button{padding:9px}
+* { box-sizing:border-box; }
+
+body {
+    margin:0;
+    overflow:hidden;
+    background:#87CEEB;
+    font-family:Arial,sans-serif;
+    color:white;
+}
+
+#game {
+    position:fixed;
+    inset:0;
+}
+
+#crosshair {
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    font-size:26px;
+    text-shadow:1px 1px 3px black;
+    pointer-events:none;
+}
+
+#hotbar {
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:4px;
+    background:#2229;
+    padding:6px;
+    border:2px solid #ffffff55;
+}
+
+.slot {
+    width:48px;
+    height:48px;
+    border:2px solid #777;
+    background:#333b;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+    position:relative;
+}
+
+.slot.selected {
+    border:3px solid white;
+    transform:scale(1.12);
+}
+
+#inventory {
+    display:none;
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:440px;
+    padding:20px;
+    background:#c6c6c6;
+    color:#222;
+    border:5px solid #555;
+    z-index:10;
+}
+
+#inventory h2 { text-align:center; }
+
+#items {
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:7px;
+}
+
+.item {
+    height:55px;
+    background:#777;
+    border:2px solid #333;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+    cursor:pointer;
+}
+
+#close {
+    width:100%;
+    padding:10px;
+    margin-top:15px;
+}
+
+#start {
+    position:fixed;
+    inset:0;
+    background:linear-gradient(#0008,#000b);
+    z-index:20;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    text-align:center;
+}
+
+#start h1 {
+    font-size:55px;
+    text-shadow:4px 4px #333;
+    margin-bottom:5px;
+}
+
+#start button {
+    padding:15px 45px;
+    background:#65a832;
+    color:white;
+    font-size:22px;
+    border:3px solid #333;
+    cursor:pointer;
+}
+
+#stats {
+    position:fixed;
+    top:12px;
+    left:12px;
+    font-size:17px;
+    text-shadow:2px 2px 3px black;
+}
+
+#help {
+    position:fixed;
+    right:12px;
+    top:12px;
+    text-align:right;
+    font-size:13px;
+    text-shadow:2px 2px 3px black;
+}
+
+#mode {
+    position:fixed;
+    top:65px;
+    left:12px;
+    text-shadow:2px 2px 3px black;
 }
 </style>
 </head>
+
 <body>
 
-<aside class="sidebar">
-<div class="logo">🎮 Games</div>
-<button class="nav active" onclick="showPage('home',this)">🏠 Home</button>
-<button class="nav" onclick="showPage('discover',this)">🔎 Discover</button>
-<button class="nav" onclick="showPage('sets',this)">📚 My Sets</button>
-<button class="nav" onclick="showPage('create',this)">➕ Create Set</button>
-<button class="nav" onclick="showPage('folders',this)">📁 Folders</button>
-<button class="nav" onclick="showPage('games',this)">🎮 Games</button>
-</aside>
+<div id="game"></div>
 
-<main class="main">
-<div class="top">
-<h1 id="heading">Home</h1>
-<div class="profile">👤 Player</div>
+<div id="crosshair">+</div>
+
+<div id="stats">
+    ❤️ <span id="health">20</span><br>
+    🍗 <span id="hunger">20</span>
 </div>
 
-<section id="home" class="page active">
-<div class="banner">
-<h2>Welcome to Games! 🎮</h2>
-<p>Discover games, create quizzes, and challenge yourself.</p>
-<button onclick="showPage('discover')">Explore Games →</button>
-</div>
-<div class="section-title"><h2>Quick Actions</h2></div>
-<div class="grid">
-<div class="card"><div class="card-icon">➕</div><h3>Create a Set</h3><p>Create your own quiz with custom questions.</p><button onclick="showPage('create')">Create</button></div>
-<div class="card"><div class="card-icon">📚</div><h3>My Sets</h3><p>View and manage your saved quizzes.</p><button onclick="showPage('sets')">View Sets</button></div>
-<div class="card"><div class="card-icon">🎮</div><h3>Play Games</h3><p>Choose a quiz and start playing.</p><button onclick="showPage('games')">Play Now</button></div>
-</div>
-<div class="section-title"><h2>Recently Added</h2></div>
-<div class="grid" id="recent"></div>
-</section>
+<div id="mode">Survival Mode</div>
 
-<section id="discover" class="page">
-<h2>Discover</h2>
-<p>Explore available quiz sets.</p>
-<input class="search" id="discoverSearch" placeholder="🔎 Search for sets..." oninput="renderDiscover()">
-<div class="grid" id="discoverGrid"></div>
-</section>
-
-<section id="sets" class="page">
-<div class="section-title">
-<h2>My Sets</h2>
-<button class="primary" onclick="showPage('create')">+ Create Set</button>
-</div>
-<input class="search" id="setSearch" placeholder="🔎 Search your sets..." oninput="renderSets()">
-<div class="grid" id="setsGrid"></div>
-</section>
-
-<section id="create" class="page">
-<h2>Create a Set</h2>
-<div class="form">
-<label>Set Name</label>
-<input id="setName" placeholder="Example: Science Quiz">
-<label>Description</label>
-<input id="setDescription" placeholder="What is this set about?">
-<label>Category</label>
-<select id="setCategory">
-<option>General Knowledge</option>
-<option>Science</option>
-<option>Math</option>
-<option>History</option>
-<option>Sports</option>
-<option>Other</option>
-</select>
-<label>Choose an icon</label>
-<select id="setIcon">
-<option>📚</option><option>🧪</option><option>⚽</option><option>🌎</option><option>🧠</option><option>🎯</option>
-</select>
-<div id="questions"></div>
-<button class="secondary" onclick="addQuestion()">+ Add Question</button>
-<br><br>
-<button class="primary" onclick="saveSet()">Save Set</button>
-<button class="secondary" onclick="resetForm()">Clear</button>
-</div>
-</section>
-
-<section id="folders" class="page">
-<div class="section-title">
-<h2>My Folders</h2>
-<button class="primary" onclick="createFolder()">+ New Folder</button>
-</div>
-<div class="grid" id="folderGrid"></div>
-</section>
-
-<section id="games" class="page">
-<h2>Game Modes</h2>
-<p>Choose a game mode and play your quiz sets.</p>
-<div class="grid">
-<div class="card"><div class="card-icon">⚡</div><h3>Classic</h3><p>Answer questions and earn points for every correct answer.</p><button onclick="chooseSet('classic')">Play Classic</button></div>
-<div class="card"><div class="card-icon">⏱️</div><h3>Time Rush</h3><p>Answer questions as quickly as possible.</p><button class="purple" onclick="chooseSet('rush')">Play Time Rush</button></div>
-<div class="card"><div class="card-icon">❤️</div><h3>Survival</h3><p>You have three lives. How many questions can you get right?</p><button class="green" onclick="chooseSet('survival')">Play Survival</button></div>
-</div>
-</section>
-
-</main>
-
-<div id="playScreen">
-<div class="play-box">
-<div style="display:flex;justify-content:space-between">
-<button class="secondary" onclick="closeGame()">✕ Exit</button>
-<strong id="gameModeLabel">CLASSIC</strong>
-</div>
-<div class="progress"><div id="progressBar"></div></div>
-<h3 id="questionNumber"></h3>
-<h2 id="questionText"></h2>
-<div class="answers" id="answerButtons"></div>
-<div id="feedback"></div>
-<h3 id="scoreText">Score: 0</h3>
-<button id="nextButton" class="primary" style="display:none;margin-top:20px" onclick="nextQuestion()">Next Question →</button>
-</div>
+<div id="help">
+    WASD: Move<br>
+    SPACE: Jump<br>
+    SHIFT: Run<br>
+    Left Click: Break block<br>
+    Right Click: Place block<br>
+    E: Inventory<br>
+    1-9: Select block<br>
+    M: Change mode
 </div>
 
-<script>
-let sets=JSON.parse(localStorage.getItem('gamesSets')||'[]');
-let folders=JSON.parse(localStorage.getItem('gamesFolders')||'[]');
-let editingId=null;
-let mode='classic';
-let currentSet=null;
-let questionIndex=0;
-let score=0;
-let lives=3;
-let answered=false;
-let timer=null;
-let timeLeft=15;
+<div id="hotbar"></div>
 
-const demo=[
-{id:'demo1',name:'General Knowledge',description:'Test your general knowledge.',category:'General Knowledge',icon:'🧠',questions:[
-{q:'What is the capital of France?',a:['London','Paris','Rome','Madrid'],correct:1},
-{q:'How many days are in a week?',a:['5','6','7','8'],correct:2},
-{q:'Which planet is known as the Red Planet?',a:['Venus','Mars','Jupiter','Saturn'],correct:1},
-{q:'What is the largest ocean?',a:['Atlantic','Indian','Arctic','Pacific'],correct:3}
-]},
-{id:'demo2',name:'Sports Trivia',description:'Test your sports knowledge.',category:'Sports',icon:'⚽',questions:[
-{q:'How many players are on a soccer team on the field?',a:['9','10','11','12'],correct:2},
-{q:'How many points is a basketball three-pointer worth?',a:['1','2','3','4'],correct:2},
-{q:'What sport uses a puck?',a:['Football','Hockey','Baseball','Tennis'],correct:1}
-]},
-{id:'demo3',name:'Science Quiz',description:'A basic science challenge.',category:'Science',icon:'🧪',questions:[
-{q:'What gas do plants absorb?',a:['Oxygen','Nitrogen','Carbon dioxide','Hydrogen'],correct:2},
-{q:'What is H2O?',a:['Salt','Water','Oxygen','Sugar'],correct:1},
-{q:'What force keeps us on the ground?',a:['Friction','Gravity','Magnetism','Electricity'],correct:1}
-]}
+<div id="inventory">
+    <h2>Inventory</h2>
+    <div id="items"></div>
+    <button id="close">Close</button>
+</div>
+
+<div id="start">
+    <h1>MINECRAFT</h1>
+    <h3>BEDROCK-STYLE BLOCK WORLD</h3>
+    <p>Explore, build, and survive.</p>
+    <button id="play">PLAY</button>
+</div>
+
+<script type="module">
+
+import * as THREE from
+"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+
+/* ---------------- SETUP ---------------- */
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x87ceeb);
+scene.fog = new THREE.Fog(0x87ceeb,35,90);
+
+const camera = new THREE.PerspectiveCamera(
+    75, window.innerWidth/window.innerHeight,0.1,150
+);
+
+const renderer = new THREE.WebGLRenderer({
+    antialias:false
+});
+
+renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+
+document.getElementById("game").appendChild(renderer.domElement);
+
+/* ---------------- LIGHTING ---------------- */
+
+const sun = new THREE.DirectionalLight(0xffffff,1.3);
+sun.position.set(30,60,20);
+sun.castShadow=true;
+scene.add(sun);
+
+scene.add(new THREE.AmbientLight(0xffffff,0.55));
+
+/* ---------------- BLOCKS ---------------- */
+
+const materials = {
+    grass: new THREE.MeshLambertMaterial({color:0x59a832}),
+    dirt: new THREE.MeshLambertMaterial({color:0x79502e}),
+    stone: new THREE.MeshLambertMaterial({color:0x858585}),
+    wood: new THREE.MeshLambertMaterial({color:0x80512c}),
+    leaves: new THREE.MeshLambertMaterial({color:0x287b27}),
+    sand: new THREE.MeshLambertMaterial({color:0xd8c27b}),
+    water: new THREE.MeshLambertMaterial({
+        color:0x287dd1,
+        transparent:true,
+        opacity:0.75
+    }),
+    bedrock: new THREE.MeshLambertMaterial({color:0x333333}),
+    coal: new THREE.MeshLambertMaterial({color:0x252525}),
+    iron: new THREE.MeshLambertMaterial({color:0xb6a99b}),
+    gold: new THREE.MeshLambertMaterial({color:0xe8c52b}),
+    diamond: new THREE.MeshLambertMaterial({color:0x26e1d2})
+};
+
+const icons = {
+    grass:"🟩",
+    dirt:"🟫",
+    stone:"⬜",
+    wood:"🪵",
+    leaves:"🌳",
+    sand:"🟨",
+    water:"🟦",
+    coal:"⚫",
+    iron:"◻️",
+    gold:"🟡",
+    diamond:"💎"
+};
+
+const geometry = new THREE.BoxGeometry(1,1,1);
+
+const world = new Map();
+const meshes = new Map();
+
+function key(x,y,z) {
+    return `${x},${y},${z}`;
+}
+
+function getBlock(x,y,z) {
+    return world.get(key(x,y,z));
+}
+
+function addBlock(x,y,z,type) {
+    const k=key(x,y,z);
+
+    if(world.has(k)) return;
+
+    world.set(k,type);
+
+    const mesh=new THREE.Mesh(
+        geometry,
+        materials[type] || materials.dirt
+    );
+
+    mesh.position.set(x,y,z);
+    mesh.castShadow=true;
+    mesh.receiveShadow=true;
+
+    mesh.userData={x,y,z,type};
+
+    scene.add(mesh);
+    meshes.set(k,mesh);
+}
+
+function removeBlock(x,y,z) {
+    const k=key(x,y,z);
+    const mesh=meshes.get(k);
+
+    if(!mesh) return;
+
+    scene.remove(mesh);
+    meshes.delete(k);
+    world.delete(k);
+}
+
+/* ---------------- TERRAIN ---------------- */
+
+function terrainHeight(x,z) {
+    return Math.floor(
+        4+
+        Math.sin(x*0.23)*2+
+        Math.cos(z*0.19)*2+
+        Math.sin((x+z)*0.12)*1.5
+    );
+}
+
+function generateWorld() {
+
+    for(let x=-20;x<=20;x++) {
+        for(let z=-20;z<=20;z++) {
+
+            const h=terrainHeight(x,z);
+
+            for(let y=-2;y<=h;y++) {
+
+                let type="stone";
+
+                if(y===-2) type="bedrock";
+                else if(y===h) type="grass";
+                else if(y>h-4) type="dirt";
+
+                if(y===h-3 && Math.random()<0.035)
+                    type="coal";
+
+                if(y===h-2 && Math.random()<0.015)
+                    type="iron";
+
+                if(y<h-4 && Math.random()<0.003)
+                    type="gold";
+
+                addBlock(x,y,z,type);
+            }
+
+            if(h<3) {
+                addBlock(x,3,z,"water");
+            }
+        }
+    }
+
+    generateTrees();
+}
+
+/* ---------------- TREES ---------------- */
+
+function generateTrees() {
+
+    for(let i=0;i<45;i++) {
+
+        const x=Math.floor(Math.random()*36)-18;
+        const z=Math.floor(Math.random()*36)-18;
+
+        if(Math.abs(x)<4 && Math.abs(z)<4) continue;
+
+        const y=terrainHeight(x,z);
+
+        for(let t=1;t<=4;t++)
+            addBlock(x,y+t,z,"wood");
+
+        for(let dx=-2;dx<=2;dx++) {
+            for(let dz=-2;dz<=2;dz++) {
+                for(let dy=3;dy<=5;dy++) {
+
+                    if(Math.abs(dx)+Math.abs(dz)>3) continue;
+
+                    if(Math.random()>0.12)
+                        addBlock(x+dx,y+dy,z+dz,"leaves");
+                }
+            }
+        }
+    }
+}
+
+generateWorld();
+
+/* ---------------- PLAYER ---------------- */
+
+const player={
+    x:0,
+    y:12,
+    z:0,
+    velocityY:0,
+    health:20,
+    hunger:20,
+    grounded:false,
+    speed:5
+};
+
+camera.position.set(player.x,player.y,player.z);
+
+let yaw=0;
+let pitch=0;
+let locked=false;
+let playing=false;
+
+const keys={};
+
+const playerHeight=1.8;
+const playerRadius=0.3;
+
+function solidAt(x,y,z) {
+    const block=getBlock(
+        Math.floor(x),
+        Math.floor(y),
+        Math.floor(z)
+    );
+
+    return block && block!=="water";
+}
+
+function collides(x,y,z) {
+
+    const points=[
+        [-playerRadius,0,-playerRadius],
+        [playerRadius,0,-playerRadius],
+        [-playerRadius,0,playerRadius],
+        [playerRadius,0,playerRadius],
+        [-playerRadius,1,-playerRadius],
+        [playerRadius,1,playerRadius]
+    ];
+
+    return points.some(p=>
+        solidAt(x+p[0],y+p[1],z+p[2])
+    );
+}
+
+/* ---------------- CONTROLS ---------------- */
+
+document.addEventListener("keydown",e=>{
+
+    keys[e.code]=true;
+
+    if(e.code==="KeyE") toggleInventory();
+
+    if(e.code==="KeyM") toggleMode();
+
+    if(e.code.startsWith("Digit")) {
+        const n=Number(e.code.replace("Digit",""))-1;
+        if(n>=0 && n<9) selectSlot(n);
+    }
+
+});
+
+document.addEventListener("keyup",e=>{
+    keys[e.code]=false;
+});
+
+document.addEventListener("mousemove",e=>{
+
+    if(!locked) return;
+
+    yaw-=e.movementX*0.002;
+    pitch-=e.movementY*0.002;
+
+    pitch=Math.max(-1.5,Math.min(1.5,pitch));
+
+    camera.rotation.order="YXZ";
+    camera.rotation.y=yaw;
+    camera.rotation.x=pitch;
+});
+
+renderer.domElement.addEventListener("click",()=>{
+
+    if(!playing) return;
+
+    if(!locked) {
+        renderer.domElement.requestPointerLock();
+    }
+});
+
+document.addEventListener("pointerlockchange",()=>{
+    locked=document.pointerLockElement===renderer.domElement;
+});
+
+/* ---------------- INVENTORY ---------------- */
+
+const blockTypes=[
+    "grass","dirt","stone","wood","leaves",
+    "sand","water","coal","iron","gold","diamond"
 ];
 
-function allSets(){return [...demo,...sets]}
+let selected=0;
+let creative=false;
 
-function saveData(){
-localStorage.setItem('gamesSets',JSON.stringify(sets));
-localStorage.setItem('gamesFolders',JSON.stringify(folders));
+const inventory={};
+
+blockTypes.forEach(b=>inventory[b]=20);
+
+function selectSlot(n) {
+    selected=n;
+    updateHotbar();
 }
 
-function showPage(id,btn){
-document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));
-if(btn)btn.classList.add('active');
-let names={home:'Home',discover:'Discover',sets:'My Sets',create:'Create a Set',folders:'My Folders',games:'Games'};
-document.getElementById('heading').textContent=names[id];
-if(id==='sets')renderSets();
-if(id==='discover')renderDiscover();
-if(id==='folders')renderFolders();
-if(id==='home')renderRecent();
+function updateHotbar() {
+
+    const bar=document.getElementById("hotbar");
+    bar.innerHTML="";
+
+    for(let i=0;i<9;i++) {
+
+        const type=blockTypes[i];
+
+        const div=document.createElement("div");
+        div.className="slot"+(selected===i?" selected":"");
+
+        div.innerHTML=
+            `<span>${icons[type]}</span>`;
+
+        bar.appendChild(div);
+    }
 }
 
-function addQuestion(data){
-let box=document.createElement('div');
-box.className='question-box';
-box.innerHTML=`
-<div style="display:flex;justify-content:space-between">
-<strong>Question</strong>
-<button class="danger" onclick="this.closest('.question-box').remove()">Remove</button>
-</div>
-<input class="qtext" placeholder="Enter your question" value="">
-<div class="answer-grid">
-<input class="ans" placeholder="Answer 1">
-<input class="ans" placeholder="Answer 2">
-<input class="ans" placeholder="Answer 3">
-<input class="ans" placeholder="Answer 4">
-</div>
-<label>Correct Answer</label>
-<select class="correct">
-<option value="0">Answer 1</option>
-<option value="1">Answer 2</option>
-<option value="2">Answer 3</option>
-<option value="3">Answer 4</option>
-</select>`;
-if(data){
-box.querySelector('.qtext').value=data.q;
-box.querySelectorAll('.ans').forEach((el,i)=>el.value=data.a[i]||'');
-box.querySelector('.correct').value=data.correct;
-}
-document.getElementById('questions').appendChild(box);
+function toggleInventory() {
+
+    const panel=document.getElementById("inventory");
+
+    if(panel.style.display==="block") {
+        panel.style.display="none";
+        if(playing) renderer.domElement.requestPointerLock();
+        return;
+    }
+
+    document.exitPointerLock();
+    panel.style.display="block";
+
+    const items=document.getElementById("items");
+    items.innerHTML="";
+
+    blockTypes.forEach((type,i)=>{
+
+        const div=document.createElement("div");
+        div.className="item";
+
+        div.innerHTML=
+            `${icons[type]}<small>${inventory[type]}</small>`;
+
+        div.onclick=()=>{
+            selectSlot(i);
+            panel.style.display="none";
+        };
+
+        items.appendChild(div);
+    });
 }
 
-function resetForm(){
-editingId=null;
-document.getElementById('setName').value='';
-document.getElementById('setDescription').value='';
-document.getElementById('setCategory').value='General Knowledge';
-document.getElementById('setIcon').value='📚';
-document.getElementById('questions').innerHTML='';
-addQuestion();
-addQuestion();
+document.getElementById("close").onclick=()=>{
+    document.getElementById("inventory").style.display="none";
+};
+
+/* ---------------- BREAKING AND PLACING ---------------- */
+
+const raycaster=new THREE.Raycaster();
+raycaster.far=6;
+
+function targetBlock() {
+
+    raycaster.setFromCamera(
+        new THREE.Vector2(0,0),
+        camera
+    );
+
+    const hits=raycaster.intersectObjects(
+        Array.from(meshes.values())
+    );
+
+    return hits.length?hits[0]:null;
 }
 
-function saveSet(){
-let name=document.getElementById('setName').value.trim();
-let description=document.getElementById('setDescription').value.trim();
-let questions=[];
-document.querySelectorAll('.question-box').forEach(box=>{
-let q=box.querySelector('.qtext').value.trim();
-let a=[...box.querySelectorAll('.ans')].map(x=>x.value.trim());
-let correct=Number(box.querySelector('.correct').value);
-if(q&&a.every(Boolean))questions.push({q,a,correct});
+document.addEventListener("mousedown",e=>{
+
+    if(!playing || !locked) return;
+
+    const hit=targetBlock();
+
+    if(!hit) return;
+
+    const b=hit.object.userData;
+
+    if(e.button===0) {
+
+        if(b.type==="bedrock") return;
+
+        removeBlock(b.x,b.y,b.z);
+
+        if(!creative) {
+            inventory[b.type]=(inventory[b.type]||0)+1;
+        }
+
+    }
+
+    if(e.button===2) {
+
+        const normal=hit.face.normal;
+
+        const x=b.x+Math.round(normal.x);
+        const y=b.y+Math.round(normal.y);
+        const z=b.z+Math.round(normal.z);
+
+        const type=blockTypes[selected];
+
+        if(!creative && inventory[type]<=0) return;
+
+        if(!getBlock(x,y,z)) {
+
+            if(
+                x<player.x+0.6 && x>player.x-0.6 &&
+                z<player.z+0.6 && z>player.z-0.6 &&
+                y>=player.y-0.2 && y<=player.y+2
+            ) return;
+
+            addBlock(x,y,z,type);
+
+            if(!creative)
+                inventory[type]--;
+        }
+    }
 });
-if(!name)return alert('Please enter a set name.');
-if(!questions.length)return alert('Add at least one complete question with four answers.');
-let item={id:editingId||('set'+Date.now()),name,description,category:document.getElementById('setCategory').value,icon:document.getElementById('setIcon').value,questions};
-let index=sets.findIndex(s=>s.id===editingId);
-if(index>=0)sets[index]=item;
-else sets.push(item);
-saveData();
-resetForm();
-showPage('sets');
-alert('Your set has been saved!');
+
+document.addEventListener("contextmenu",e=>e.preventDefault());
+
+/* ---------------- GAME MODE ---------------- */
+
+function toggleMode() {
+
+    creative=!creative;
+
+    document.getElementById("mode").textContent=
+        creative?"Creative Mode":"Survival Mode";
+
+    if(creative) {
+        player.velocityY=0;
+        player.health=20;
+    }
 }
 
-function renderSets(){
-let search=(document.getElementById('setSearch')?.value||'').toLowerCase();
-let list=sets.filter(s=>s.name.toLowerCase().includes(search));
-document.getElementById('setsGrid').innerHTML=list.length?list.map(cardHTML).join(''):'<div class="empty">You have not created any sets yet.</div>';
+/* ---------------- MOB SYSTEM ---------------- */
+
+const mobs=[];
+
+function spawnMob() {
+
+    const material=new THREE.MeshLambertMaterial({
+        color:0x427b35
+    });
+
+    const mob=new THREE.Mesh(
+        new THREE.BoxGeometry(0.8,1.8,0.6),
+        material
+    );
+
+    const x=Math.random()*30-15;
+    const z=Math.random()*30-15;
+    const y=terrainHeight(x,z)+1;
+
+    mob.position.set(x,y,z);
+    scene.add(mob);
+
+    mobs.push({
+        mesh:mob,
+        speed:0.7
+    });
 }
 
-function renderDiscover(){
-let search=(document.getElementById('discoverSearch')?.value||'').toLowerCase();
-let list=allSets().filter(s=>(s.name+' '+s.category+' '+s.description).toLowerCase().includes(search));
-document.getElementById('discoverGrid').innerHTML=list.map(cardHTML).join('');
+for(let i=0;i<5;i++) spawnMob();
+
+function updateMobs(dt) {
+
+    if(creative) return;
+
+    for(const mob of mobs) {
+
+        const m=mob.mesh;
+
+        const dx=player.x-m.position.x;
+        const dz=player.z-m.position.z;
+
+        const distance=Math.sqrt(dx*dx+dz*dz);
+
+        if(distance<13 && distance>1.2) {
+
+            m.position.x+=(dx/distance)*mob.speed*dt;
+            m.position.z+=(dz/distance)*mob.speed*dt;
+
+            m.position.y=terrainHeight(
+                Math.round(m.position.x),
+                Math.round(m.position.z)
+            )+1;
+        }
+
+        if(distance<1.3) {
+            player.health=Math.max(0,player.health-0.3);
+        }
+    }
 }
 
-function renderRecent(){
-document.getElementById('recent').innerHTML=allSets().slice(-4).reverse().map(cardHTML).join('');
+/* ---------------- MOVEMENT ---------------- */
+
+function updatePlayer(dt) {
+
+    const forward=new THREE.Vector3(
+        -Math.sin(yaw),0,-Math.cos(yaw)
+    );
+
+    const right=new THREE.Vector3(
+        Math.cos(yaw),0,-Math.sin(yaw)
+    );
+
+    let move=new THREE.Vector3();
+
+    if(keys.KeyW) move.add(forward);
+    if(keys.KeyS) move.sub(forward);
+    if(keys.KeyD) move.add(right);
+    if(keys.KeyA) move.sub(right);
+
+    if(move.length()>0) move.normalize();
+
+    let speed=player.speed;
+
+    if(keys.ShiftLeft) speed=8;
+
+    const nx=player.x+move.x*speed*dt;
+    const nz=player.z+move.z*speed*dt;
+
+    if(!collides(nx,player.y,player.z))
+        player.x=nx;
+
+    if(!collides(player.x,player.y,nz))
+        player.z=nz;
+
+    if(creative) {
+
+        if(keys.Space) player.y+=speed*dt;
+        if(keys.ControlLeft) player.y-=speed*dt;
+
+    } else {
+
+        if(keys.Space && player.grounded) {
+            player.velocityY=8;
+            player.grounded=false;
+        }
+
+        player.velocityY-=20*dt;
+
+        let ny=player.y+player.velocityY*dt;
+
+        if(collides(player.x,ny,player.z)) {
+            if(player.velocityY<0)
+                player.grounded=true;
+
+            player.velocityY=0;
+        } else {
+            player.y=ny;
+            player.grounded=false;
+        }
+
+        if(player.y<-10) {
+            player.x=0;
+            player.z=0;
+            player.y=12;
+            player.health=Math.max(1,player.health-5);
+        }
+    }
+
+    camera.position.set(
+        player.x,
+        player.y+1.5,
+        player.z
+    );
+
+    document.getElementById("health").textContent=
+        Math.ceil(player.health);
+
+    document.getElementById("hunger").textContent=
+        Math.floor(player.hunger);
 }
 
-function cardHTML(s){
-return `<div class="card">
-<div class="card-icon">${s.icon}</div>
-<h3>${escapeHTML(s.name)}</h3>
-<p>${escapeHTML(s.description||'Quiz set')}<br>${s.questions.length} questions · ${escapeHTML(s.category)}</p>
-<button onclick="startGame('${s.id}','classic')">Play Set</button>
-${sets.some(x=>x.id===s.id)?`<button class="secondary" onclick="editSet('${s.id}')">Edit</button><button class="danger" onclick="deleteSet('${s.id}')">Delete</button>`:''}
-</div>`;
+/* ---------------- DAY AND NIGHT ---------------- */
+
+let time=0;
+
+function updateDayNight(dt) {
+
+    time+=dt*0.025;
+
+    const sunlight=(Math.sin(time)+1)/2;
+
+    sun.intensity=0.15+sunlight*1.2;
+
+    const sky=new THREE.Color();
+
+    sky.setRGB(
+        0.025+sunlight*0.5,
+        0.035+sunlight*0.75,
+        0.12+sunlight*0.85
+    );
+
+    scene.background.copy(sky);
+    scene.fog.color.copy(sky);
+
+    sun.position.set(
+        Math.cos(time)*50,
+        15+sunlight*50,
+        Math.sin(time)*50
+    );
 }
 
-function escapeHTML(s){
-return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* ---------------- START ---------------- */
+
+document.getElementById("play").onclick=()=>{
+
+    document.getElementById("start").style.display="none";
+
+    playing=true;
+
+    renderer.domElement.requestPointerLock();
+};
+
+updateHotbar();
+
+/* ---------------- MAIN LOOP ---------------- */
+
+let last=performance.now();
+
+function animate(now) {
+
+    requestAnimationFrame(animate);
+
+    const dt=Math.min((now-last)/1000,0.05);
+    last=now;
+
+    if(playing && locked) {
+
+        updatePlayer(dt);
+        updateMobs(dt);
+        updateDayNight(dt);
+    }
+
+    renderer.render(scene,camera);
 }
 
-function editSet(id){
-let s=sets.find(x=>x.id===id);
-if(!s)return;
-editingId=id;
-document.getElementById('setName').value=s.name;
-document.getElementById('setDescription').value=s.description;
-document.getElementById('setCategory').value=s.category;
-document.getElementById('setIcon').value=s.icon;
-document.getElementById('questions').innerHTML='';
-s.questions.forEach(q=>addQuestion(q));
-showPage('create');
-}
+animate(performance.now());
 
-function deleteSet(id){
-if(!confirm('Delete this set?'))return;
-sets=sets.filter(s=>s.id!==id);
-saveData();
-renderSets();
-renderDiscover();
-}
+/* ---------------- RESIZE ---------------- */
 
-function chooseSet(m){
-mode=m;
-showPage('discover');
-}
+window.addEventListener("resize",()=>{
 
-function startGame(id,m){
-currentSet=allSets().find(s=>s.id===id);
-if(!currentSet||!currentSet.questions.length)return;
-mode=m||'classic';
-questionIndex=0;
-score=0;
-lives=3;
-document.getElementById('playScreen').style.display='block';
-document.getElementById('gameModeLabel').textContent=mode.toUpperCase();
-showQuestion();
-}
+    camera.aspect=window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
 
-function showQuestion(){
-clearInterval(timer);
-answered=false;
-let q=currentSet.questions[questionIndex];
-document.getElementById('questionNumber').textContent='Question '+(questionIndex+1)+' of '+currentSet.questions.length;
-document.getElementById('questionText').textContent=q.q;
-document.getElementById('feedback').textContent='';
-document.getElementById('nextButton').style.display='none';
-document.getElementById('progressBar').style.width=(questionIndex/currentSet.questions.length*100)+'%';
-document.getElementById('answerButtons').innerHTML=q.a.map((a,i)=>`<button class="answer" onclick="checkAnswer(${i},this)">${escapeHTML(a)}</button>`).join('');
-document.getElementById('scoreText').textContent='Score: '+score+(mode==='survival'?' | Lives: ❤️ '+lives:'');
-if(mode==='rush'){
-timeLeft=15;
-document.getElementById('feedback').textContent='⏱️ 15 seconds!';
-timer=setInterval(()=>{
-timeLeft--;
-document.getElementById('feedback').textContent='⏱️ '+timeLeft+' seconds left!';
-if(timeLeft<=0){
-clearInterval(timer);
-if(!answered){
-answered=true;
-document.getElementById('feedback').textContent='Time is up!';
-document.getElementById('answerButtons').querySelectorAll('button').forEach(b=>b.disabled=true);
-document.getElementById('nextButton').style.display='inline-block';
-}
-}
-},1000);
-}
-}
-
-function checkAnswer(i,button){
-if(answered)return;
-answered=true;
-clearInterval(timer);
-let q=currentSet.questions[questionIndex];
-let correct=i===q.correct;
-if(correct){
-score+=mode==='rush'?150:100;
-document.getElementById('feedback').textContent='✅ Correct! Great job!';
-}else{
-document.getElementById('feedback').textContent='❌ Incorrect! Correct answer: '+q.a[q.correct];
-if(mode==='survival')lives--;
-}
-document.getElementById('answerButtons').querySelectorAll('button').forEach((b,index)=>{
-b.disabled=true;
-if(index===q.correct)b.style.outline='4px solid #25bd82';
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
 });
-document.getElementById('scoreText').textContent='Score: '+score+(mode==='survival'?' | Lives: ❤️ '+lives:'');
-document.getElementById('nextButton').style.display='inline-block';
-}
 
-function nextQuestion(){
-if(mode==='survival'&&lives<=0)return finishGame();
-questionIndex++;
-if(questionIndex>=currentSet.questions.length)finishGame();
-else showQuestion();
-}
-
-function finishGame(){
-clearInterval(timer);
-document.getElementById('progressBar').style.width='100%';
-document.getElementById('questionNumber').textContent='GAME OVER';
-document.getElementById('questionText').textContent='You scored '+score+' points!';
-document.getElementById('answerButtons').innerHTML='<h2>🏆</h2>';
-document.getElementById('feedback').textContent='You completed '+Math.min(questionIndex+1,currentSet.questions.length)+' questions!';
-document.getElementById('scoreText').textContent='Final Score: '+score;
-document.getElementById('nextButton').style.display='none';
-}
-
-function closeGame(){
-clearInterval(timer);
-document.getElementById('playScreen').style.display='none';
-}
-
-function createFolder(){
-let name=prompt('What would you like to name your folder?');
-if(!name||!name.trim())return;
-folders.push({id:Date.now(),name:name.trim(),sets:[]});
-saveData();
-renderFolders();
-}
-
-function renderFolders(){
-document.getElementById('folderGrid').innerHTML=folders.length?folders.map(f=>`
-<div class="card">
-<div class="card-icon">📁</div>
-<h3>${escapeHTML(f.name)}</h3>
-<p>${f.sets.length} sets</p>
-<button onclick="openFolder(${f.id})">Open Folder</button>
-<button class="danger" onclick="deleteFolder(${f.id})">Delete</button>
-</div>`).join(''):'<div class="empty">No folders yet. Create one to organize your sets!</div>';
-}
-
-function openFolder(id){
-let f=folders.find(x=>x.id===id);
-if(!f)return;
-let available=sets.filter(s=>!f.sets.includes(s.id));
-let choice=prompt('Folder: '+f.name+'\nEnter the number of a set to add:\n'+available.map((s,i)=>(i+1)+'. '+s.name).join('\n'));
-if(choice&&available[Number(choice)-1]){
-f.sets.push(available[Number(choice)-1].id);
-saveData();
-renderFolders();
-}else if(choice){
-alert('Invalid selection.');
-}
-}
-
-function deleteFolder(id){
-if(!confirm('Delete this folder?'))return;
-folders=folders.filter(f=>f.id!==id);
-saveData();
-renderFolders();
-}
-
-resetForm();
-renderRecent();
 </script>
 </body>
 </html>
